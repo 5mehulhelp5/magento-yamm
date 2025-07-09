@@ -1,6 +1,6 @@
-# Magento_Yamm – Instant Refund Integration via Yamm.sa
+# Mageserv_Yamm – Instant Refund Integration via Yamm.sa
 
-**Magento_Yamm** is a Magento 2 extension that integrates with [Yamm.sa](https://yamm.sa/), a Saudi-based solution that provides instant, automated refunds and returns for eCommerce merchants.
+**Mageserv_Yamm** is a Magento 2 extension that integrates with [Yamm.sa](https://yamm.sa/), a Saudi-based solution that provides instant, automated refunds and returns for eCommerce merchants.
 
 This module enables store admins to trigger customer refunds directly from the Magento backend using Yamm’s API — with no need for manual bank transfers or third-party payment gateways.
 
@@ -34,5 +34,5 @@ This module enables store admins to trigger customer refunds directly from the M
 1. Place the module into your Magento codebase:
 
 ```bash
-mkdir -p app/code/Magento/Yamm
-git clone https://github.com/your-org/magento-yamm-refund.git app/code/Magento/Yamm
+mkdir -p app/code/Mageserv/Yamm
+git clone https://github.com/your-org/magento-yamm-refund.git app/code/Mageserv/Yamm
