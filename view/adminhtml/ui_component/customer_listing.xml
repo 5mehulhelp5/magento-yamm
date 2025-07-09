@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * customer_listing
+ *
+ * @copyright Copyright © 2024 Magerserv LTD.. All rights reserved.
+ * @author    mageserv.ltd@gmail.com
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top">
+        <massaction name="listing_massaction">
+            <action name="sync_to_yamm">
+                <settings>
+                    <url path="yamm/customer/massSync"/>
+                    <type>sync_to_yamm</type>
+                    <label translate="true">Sync with Yamm</label>
+                </settings>
+            </action>
+            <action name="clear_yamm_ref">
+                <settings>
+                    <url path="yamm/customer/massClearRef"/>
+                    <type>clear_yamm_ref</type>
+                    <label translate="true">Reset Sync with Yamm</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+</listing>

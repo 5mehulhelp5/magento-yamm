@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Mageserv\Yamm\Api\OrderRepositoryInterface" type="Mageserv\Yamm\Model\OrderRepository"/>
+    <preference for="Mageserv\Yamm\Api\CronRepositoryInterface" type="Mageserv\Yamm\Model\CronRepository"/>
+    <preference for="Mageserv\Yamm\Api\Data\ResponseInterface" type="Mageserv\Yamm\Model\Data\Response"/>
+    <preference for="Mageserv\Yamm\Api\Data\CronItemInterface" type="Mageserv\Yamm\Model\Cron"/>
+    <preference for="Mageserv\Yamm\Api\Data\FetchRequestInterface" type="Mageserv\Yamm\Model\Data\FetchRequest"/>
+    <preference for="Mageserv\Yamm\Api\Data\OrderInterface" type="Mageserv\Yamm\Model\Data\Order"/>
+    <preference for="Mageserv\Yamm\Api\Data\OrderSearchResultInterface" type="Mageserv\Yamm\Model\Data\OrderSearchResults"/>
+    <preference for="Mageserv\Yamm\Api\Data\RefundItemInterface" type="Mageserv\Yamm\Model\Data\RefundItem"/>
+    <preference for="Mageserv\Yamm\Api\Data\OrderItemInterface" type="Mageserv\Yamm\Model\Data\OrderItem"/>
+    <preference for="Mageserv\Yamm\Api\Data\OrderStatusInterface" type="Mageserv\Yamm\Model\Data\OrderStatus"/>
+    <preference for="Mageserv\Yamm\Api\Data\CategoryInterface"
+                type="Mageserv\Yamm\Model\Data\Category"/>
+    <preference for="Mageserv\Yamm\Api\Data\CustomerInterface"
+                type="Mageserv\Yamm\Model\Data\Customer"/>
+    <preference for="Mageserv\Yamm\Api\Data\CustomerSearchResultsInterface"
+                type="Mageserv\Yamm\Model\Data\CustomerSearchResults"/>
+    <preference for="Mageserv\Yamm\Api\CategoryRepositoryInterface"
+                type="Mageserv\Yamm\Model\CategoryRepository"/>
+    <preference for="Mageserv\Yamm\Api\CustomerRepositoryInterface"
+                type="Mageserv\Yamm\Model\CustomerRepository"/>
+    <preference for="Mageserv\Yamm\Api\MethodsManagementInterface"
+                type="Mageserv\Yamm\Model\MethodsManagement"/>
+    <preference for="Mageserv\Yamm\Api\ProductStockUpdateInterface"
+                type="Mageserv\Yamm\Model\ProductStockUpdate"/>
+    <preference for="Mageserv\Yamm\Api\Data\StoreViewInterface"
+                type="Mageserv\Yamm\Model\Data\StoreView"/>
+    <preference for="Mageserv\Yamm\Api\StoreManagementInterface"
+                type="Mageserv\Yamm\Model\StoreManagement"/>
+    <preference for="Mageserv\Yamm\Api\Data\MethodInterface"
+                type="Mageserv\Yamm\Model\Data\Method"/>
+    <preference for="Mageserv\Yamm\Api\Data\ProductInterface"
+                type="Mageserv\Yamm\Model\Data\Product"/>
+    <preference for="Mageserv\Yamm\Api\Data\ProductSearchResultsInterface"
+                type="Mageserv\Yamm\Model\Data\ProductSearchResults"/>
+    <preference for="Mageserv\Yamm\Api\CatalogManagementInterface"
+                type="Mageserv\Yamm\Model\CatalogManagement"/>
+    <preference for="Mageserv\Yamm\Api\Data\ExtendedOrderItemInterface"
+                type="Mageserv\Yamm\Model\Data\ExtendedOrderItem"/>
+    <!--Grid collection-->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="yamm_sync_log_grid_data_source" xsi:type="string">
+                    Mageserv\Yamm\Model\ResourceModel\Cron\Grid\Collection
+                </item>
+                <item name="yamm_refund_listing_data_source" xsi:type="string">
+                    Mageserv\Yamm\Model\ResourceModel\Refund\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Mageserv\Yamm\Model\ResourceModel\Cron\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">yamm_schedule</argument>
+            <argument name="resourceModel" xsi:type="string">Mageserv\Yamm\Model\ResourceModel\Cron</argument>
+        </arguments>
+    </virtualType>
+    <type name="Mageserv\Yamm\Model\ResourceModel\Refund\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">yamm_refunds</argument>
+            <argument name="resourceModel" xsi:type="string">Mageserv\Yamm\Model\ResourceModel\Refund</argument>
+        </arguments>
+    </type>
+
+    <!-- Cron Tasks -->
+    <virtualType name="CustomerSyncCron" type="Mageserv\Yamm\Cron\Cron">
+        <arguments>
+            <argument name="entityRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface</argument>
+            <argument name="entityType" xsi:type="const">Mageserv\Yamm\Model\Config\Source\CronType::CUSTOMER</argument>
+            <argument name="deleteEvent" xsi:type="const">Mageserv\Yamm\Model\Config\Source\TriggerEvents\Options::DELETE_CUSTOMER</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ProductSyncCron" type="Mageserv\Yamm\Cron\Cron">
+        <arguments>
+            <argument name="entityRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface</argument>
+            <argument name="entityType" xsi:type="const">Mageserv\Yamm\Model\Config\Source\CronType::PRODUCT</argument>
+            <argument name="deleteEvent" xsi:type="const">Mageserv\Yamm\Model\Config\Source\TriggerEvents\Options::DELETE_PRODUCT</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CategorySyncCron" type="Mageserv\Yamm\Cron\Cron">
+        <arguments>
+            <argument name="entityRepository" xsi:type="object">Magento\Catalog\Api\CategoryRepositoryInterface</argument>
+            <argument name="entityType" xsi:type="const">Mageserv\Yamm\Model\Config\Source\CronType::CATEGORY</argument>
+            <argument name="deleteEvent" xsi:type="const">Mageserv\Yamm\Model\Config\Source\TriggerEvents\Options::DELETE_CATEGORY</argument>
+            <argument name="retrieveMethod" xsi:type="string">get</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="OrderSyncCron" type="Mageserv\Yamm\Cron\Cron">
+        <arguments>
+            <argument name="entityRepository" xsi:type="object">Magento\Sales\Api\OrderRepositoryInterface</argument>
+            <argument name="entityType" xsi:type="const">Mageserv\Yamm\Model\Config\Source\CronType::ORDER</argument>
+            <argument name="deleteEvent" xsi:type="const">Mageserv\Yamm\Model\Config\Source\TriggerEvents\Options::DELETE_ORDER</argument>
+            <argument name="retrieveMethod" xsi:type="string">get</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- delete observers -->
+    <virtualType name="DeleteObserver" type="Mageserv\Yamm\Observer\EntityObserver">
+        <arguments>
+            <argument name="action" xsi:type="string">delete</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Can Hold Status -->
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="disable_can_hold_after_refund"
+                type="Mageserv\Yamm\Plugin\Order"
+                disabled="false"
+                />
+    </type>
+</config>

@@ -1,0 +1,39 @@
+<?php
+/** @var \Mageserv\Yamm\Block\RefundForm $block */
+?>
+<div class="yamm-container">
+    <div class="yamm-wrapper">
+        <div class="img-wrapper">
+            <img class="img" src="<?= $block->getLogoUrl();?>">
+        </div>
+        <form action="https://yamm.sa/store" class="form" id="yamm-form" target="_blank">
+            <input type="hidden" name="hostname" value="<?=$block->getHostName();?>" />
+            <div class="form-control" data-name="order_number">
+                <label class="label"><?=__("Order Number");?></label>
+                <div class="control">
+                    <input class="input-text" type="text" name="orderNumber" placeholder="">
+                </div>
+            </div>
+            <?php if($block->getValidationMethod() == \Mageserv\Yamm\Model\Config\Source\ValidationMethod::VALIDATE_BY_MOBILE_NUMBER):?>
+                <div class="form-control" data-name="phone">
+                    <label class="label "><?=__("Mobile Number");?></label>
+                    <div class="control">
+                        <div class="phone-number-prefix">+966</div>
+                        <input class="input-text" type="text" name="phone" placeholder="5xxxxxxx" data-validate="{required:true"
+                               data-mage-init='{"mage/trim-input":{}}'>
+                    </div>
+                </div>
+            <?php else:?>
+                <div class="form-control" data-name="email">
+                    <label class="label "><?=__("Email");?></label>
+                    <div class="control">
+                        <input class="input-text" type="email" name="email" placeholder="" data-validate="{required:true, 'validate-email':true}"
+                               data-mage-init='{"mage/trim-input":{}}'>
+                    </div>
+                </div>
+            <?php endif;?>
+            <button class="action submit primary" id="submit-btn"><?=__("Refund now");?></button>
+        </form>
+        <p class="yamm-footer"><?=__("Refund your orders value just in seconds and forget about all these weeks of waiting of normal refund");?></p>
+    </div>
+</div>

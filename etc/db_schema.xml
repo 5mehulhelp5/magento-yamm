@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * db_schema
+ *
+ * @copyright Copyright © 2024 Magerserv LTD.. All rights reserved.
+ * @author    mageserv.ltd@gmail.com
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="yamm_schedule" resource="default" engine="innodb" comment="yamm Schedule Table">
+        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Schedule ID"/>
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="event_type" nullable="false" length="255"
+                comment="Event Type"/>
+        <column xsi:type="smallint" name="status" padding="5" unsigned="false" nullable="false" default="0"
+                comment="Status"/>
+        <column xsi:type="mediumtext" name="error_message" nullable="true" comment="Error Message"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="queue_id"/>
+        </constraint>
+    </table>
+    <table name="yamm_refunds" resource="default" engine="innodb" comment="yamm Refunded Orders Table">
+        <column xsi:type="int" name="refund_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Refund ID"/>
+        <column xsi:type="varchar" name="increment_id" length="255" nullable="false"
+                comment="Increment ID"/>
+        <column xsi:type="varchar" name="reference_id" nullable="false" length="255"
+                comment="Yamm Reference ID"/>
+        <column xsi:type="mediumtext" name="products" nullable="true"
+                comment="Array of Products names"/>
+        <column xsi:type="decimal" name="order_total" precision="10" scale="2"  nullable="true" comment="Order Total"/>
+        <column xsi:type="smallint" name="status" padding="5" unsigned="false" nullable="false" default="0"
+                comment="Status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="refund_id"/>
+        </constraint>
+        <index referenceId="YAMM_REFUNDS_REFERENCE_ID_INDEX" indexType="btree">
+            <column name="reference_id"/>
+        </index>
+
+        <index referenceId="YAMM_REFUNDS_FULL_TEXT_INDEX" indexType="fulltext">
+            <column name="increment_id"/>
+            <column name="reference_id"/>
+            <column name="products"/>
+        </index>
+    </table>
+
+    <table name="sales_order" resource="sales" comment="Sales Flat Order">
+        <column xsi:type="varchar" length="255" name="last_state" nullable="true" comment="Last State before refund"/>
+        <column xsi:type="varchar" length="255" name="last_status" nullable="true" comment="Last Status before refund"/>
+        <column xsi:type="datetime" name="first_complete_at" nullable="true" comment="Last Status before refund"/>
+    </table>
+</schema>

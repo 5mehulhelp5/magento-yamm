@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * crontab
+ *
+ * @copyright Copyright © 2024 Magerserv LTD.. All rights reserved.
+ * @author    mageserv.ltd@gmail.com
+ */
+-->
+<config>
+    <group id="yamm_refunds_crongroup">
+        <job name="yamm_sync_customers" instance="CustomerSyncCron" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="yamm_sync_products" instance="ProductSyncCron" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="yamm_sync_categories" instance="CategorySyncCron" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="yamm_sync_orders" instance="OrderSyncCron" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+    </group>
+</config>

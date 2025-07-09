@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * yamm_log_index.xml
+ *
+ * @copyright Copyright © 2024 Magerserv LTD.. All rights reserved.
+ * @author    mageserv.ltd@gmail.com
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="yamm_sync_log_grid"/>
+        </referenceContainer>
+    </body>
+</page>

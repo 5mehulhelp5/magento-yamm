@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * events
+ *
+ * @copyright Copyright © 2024 Magerserv LTD.. All rights reserved.
+ * @author    mageserv.ltd@gmail.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_save_after">
+        <observer name="sync_yamm_customer_save_after" instance="Mageserv\Yamm\Observer\EntityObserver" />
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="sync_yamm_catalog_product_save_after" instance="Mageserv\Yamm\Observer\EntityObserver" />
+    </event>
+    <event name="catalog_category_save_after">
+        <observer name="sync_yamm_catalog_category_save_after" instance="Mageserv\Yamm\Observer\EntityObserver" />
+    </event>
+    <event name="sales_order_save_after">
+        <observer name="sync_yamm_sales_order_save_after" instance="Mageserv\Yamm\Observer\EntityObserver" />
+    </event>
+    <!-- delete events -->
+    <event name="customer_delete_after">
+        <observer name="sync_yamm_customer_delete_after" instance="DeleteObserver" />
+    </event>
+    <event name="catalog_product_delete_after">
+        <observer name="sync_yamm_customer_delete_after" instance="DeleteObserver" />
+    </event>
+    <event name="catalog_category_delete_after">
+        <observer name="sync_yamm_customer_delete_after" instance="DeleteObserver" />
+    </event>
+    <event name="sales_order_delete_after">
+        <observer name="sync_yamm_customer_delete_after" instance="DeleteObserver" />
+    </event>
+</config>

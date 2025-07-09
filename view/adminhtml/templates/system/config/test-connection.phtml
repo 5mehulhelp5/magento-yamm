@@ -1,0 +1,14 @@
+<div class="actions actions-test-connection">
+    <button class="actions-test-connection" type="button" id="<?= $block->getHtmlId() ?>">
+        <span><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
+    </button>
+</div>
+<script type="text/x-magento-init">
+    {
+        "#yamm_refunds_api_configuration_test_connection": {
+            "Mageserv_Yamm/js/testconnection": {
+                "ajaxUrl": "<?= $block->escapeHtml($block->getButtonUrl()) ?>"
+            }
+        }
+    }
+</script>

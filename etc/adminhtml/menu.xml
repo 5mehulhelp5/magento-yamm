@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * menu
+ *
+ * @copyright Copyright © 2024 Magerserv LTD.. All rights reserved.
+ * @author    mageserv.ltd@gmail.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Mageserv_Yamm::yamm" title="Yamm" module="Mageserv_Yamm" sortOrder="45" resource="Mageserv_Yamm::yamm" translate="title"/>
+        <add id="Mageserv_Yamm::log" translate="title" title="Sync Logs" module="Mageserv_Yamm" sortOrder="30" parent="Mageserv_Yamm::yamm" action="yamm/log/index" resource="Mageserv_Yamm::log"/>
+        <add id="Mageserv_Yamm::refund" translate="title" title="Refunded Orders" module="Mageserv_Yamm" sortOrder="10" parent="Mageserv_Yamm::yamm" action="yamm/refund/index" resource="Mageserv_Yamm::refund"/>
+        <add id="Mageserv_Yamm::configuration" translate="title" title="Configuration" module="Mageserv_Yamm" sortOrder="20" action="adminhtml/system_config/edit/section/yamm_refunds" resource="Mageserv_Yamm::configuration" parent="Mageserv_Yamm::yamm"/>
+    </menu>
+</config>

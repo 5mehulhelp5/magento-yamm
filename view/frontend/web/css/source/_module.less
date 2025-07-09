@@ -1,0 +1,130 @@
+& when (@media-common = true) {
+
+    .yamm-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+        margin: auto;
+        padding: 0 6px;
+
+        .yamm-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 32px;
+            background: linear-gradient(91.23deg, #F8F4FF 0%, #FFFAEB 100%);
+            boxShadow: 0px 2px 10px rgba(158, 108, 255, 0.12);
+            border-radius: 10px;
+            margin-top: 1.4rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 960px;
+            border: 1px solid #7459AD;
+
+            .img-wrapper {
+                width: 100px;
+
+                .img {
+                    width: 100%;
+                }
+            }
+
+            .form {
+                display: flex;
+                gap: 16px;
+                flex-direction: column;
+
+                .form-control {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    flex: 1;
+
+                    .label {
+                        font-size: 14px;
+                        color: #000000;
+                        font-weight: 400;
+                    }
+
+                    .control {
+                        width: 100%;
+                        display: flex;
+                        gap: 8px;
+
+                        .input-text {
+                            outline: none;
+                            border: 1px solid #7459AD;
+                            border-radius: 10px;
+                            background: #ffffff;
+                            flex: 1;
+                            padding: 0 8px;
+                            height: 40px;
+                        }
+
+                        .phone-number-prefix {
+                            border: 1px solid #6F6F6F;
+                            border-radius: 10px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 8px;
+                            background: #F3F3F3;
+                            color: #767676;
+                            font-size: 15px;
+                            font-weight: 400;
+                        }
+                    }
+                }
+
+                .submit {
+                    border: none;
+                    outline: none;
+                    display: flex;
+                    align-items: center;
+                    align-self: end;
+                    justify-content: center;
+                    border-radius: 25px;
+                    background: #7459AD;
+                    padding: 0 16px;
+                    color: #ffffff;
+                    font-size: 15px;
+                    font-weight: 400;
+                    cursor: pointer;
+                    height: 40px;
+                    width: 100%;
+                }
+            }
+
+            .yamm-footer {
+                font-size: 16px;
+                color: #5936B7;
+                margin: 0;
+                margin-top: 12px;
+            }
+        }
+    }
+}
+@media screen and (min-width: @screen__m) {
+    .yamm-container{
+        width: 1240px;
+        margin: auto;
+        padding: 0 8px;
+        .yamm-wrapper{
+            .form{
+                gap: 24px;
+                flex-direction: row;
+                .form-control{
+                    .control{
+                        flex: 1;
+                        gap: 16px;
+                    }
+                }
+                .submit{
+                    width: fit-content;
+                }
+            }
+        }
+
+    }
+}

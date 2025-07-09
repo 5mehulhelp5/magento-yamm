@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="yamm_refunds" type="text" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <class>separator-top</class>
+            <label>Yamm Refunds</label>
+            <tab>sales</tab>
+            <resource>Mageserv_Yamm::configuration</resource>
+            <group id="general_configuration" translate="label" type="text" sortOrder="10" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>Basic Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Enable Yamm Refund</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="validation_method" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Validation Method</label>
+                    <source_model>Mageserv\Yamm\Model\Config\Source\ValidationMethod</source_model>
+                </field>
+                <!--<field id="mobile_attribute" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Mobile Attribute</label>
+                    <source_model>Mageserv\Yamm\Model\Config\Source\MobileAttribute</source_model>
+                    <depends>
+                        <field id="validation_method">validate_by_mobile</field>
+                    </depends>
+                </field>
+                <field id="mobile_attribute_code" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Mobile Attribute Code</label>
+                    <source_model>Mageserv\Yamm\Model\Config\Source\AddressAttributes</source_model>
+                    <depends>
+                        <field id="mobile_attribute">address_custom_attribute</field>
+                    </depends>
+                </field>-->
+
+                <field id="show_refund_form" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Show Yamm Refund Form</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="refund_policy_page" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Refund Policy Page</label>
+                    <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                    <depends>
+                        <field id="show_refund_form">1</field>
+                    </depends>
+                </field>
+                <field id="allowed_payment_methods" translate="label" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="0">
+                    <label>Allowed Payment Methods</label>
+                    <source_model>Mageserv\Yamm\Model\Config\Source\PaymentMethods</source_model>
+                </field>
+            </group>
+            <group id="api_configuration" translate="label" type="text" sortOrder="20" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>API Configuration</label>
+                <field id="extension_version" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Version</label>
+                    <frontend_model>Mageserv\Yamm\Block\Adminhtml\System\Config\Form\ExtensionVersion</frontend_model>
+                </field>
+                <field id="api_environment" translate="label" type="select" sortOrder="25" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Api Environment</label>
+                    <source_model>Mageserv\Yamm\Model\Config\Source\ApiEnvironment</source_model>
+                </field>
+                <field id="api_token" translate="label" type="password" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Api Token</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="test_connection" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label></label>
+                    <button_label>Test connection</button_label>
+                    <button_url>yamm/connection/test</button_url>
+                    <frontend_model>Mageserv\Yamm\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                </field>
+                <field id="install" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label></label>
+                    <button_label>Install Extension</button_label>
+                    <button_url>yamm/connection/sync</button_url>
+                    <frontend_model>Mageserv\Yamm\Block\Adminhtml\System\Config\Sync</frontend_model>
+                    <depends>
+                        <field id="is_connected">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

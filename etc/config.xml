@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * config
+ *
+ * @copyright Copyright © 2024 Magerserv LTD.. All rights reserved.
+ * @author    mageserv.ltd@gmail.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <yamm_refunds>
+            <general_configuration>
+                <enable>0</enable>
+                <debug>1</debug>
+                <trigger_actions>0</trigger_actions>
+            </general_configuration>
+            <api_configuration>
+                <api_environment>staging</api_environment>
+                <api_token backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </api_configuration>
+        </yamm_refunds>
+    </default>
+</config>
