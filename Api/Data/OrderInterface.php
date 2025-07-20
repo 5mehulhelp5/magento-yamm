@@ -14,6 +14,7 @@ interface OrderInterface extends \Magento\Sales\Api\Data\OrderInterface
     const DATE = 'date';
     const FIRST_COMPLETE_AT = 'first_complete_at';
     const ORDER_STATUS = 'order_status';
+    const ORDER_STATE= 'order_state';
     const PAYMENT_METHOD = 'payment_method';
     const ORDER_CURRENCY = 'order_currency';
     const AMOUNTS = 'amounts';
@@ -93,6 +94,17 @@ interface OrderInterface extends \Magento\Sales\Api\Data\OrderInterface
      * @return $this
      */
     public function setOrderStatus($orderStatus);
+
+    /**
+     * @return string
+     */
+    public function getOrderState();
+
+    /**
+     * @param string $orderState
+     * @return $this
+     */
+    public function setOrderState($orderState);
 
     /**
      * @return string
@@ -257,8 +269,8 @@ interface OrderInterface extends \Magento\Sales\Api\Data\OrderInterface
     /**
      * Sets the shipping address, if any, for the order.
      *
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface|null $shippingAddress
      * @return $this
      */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
+    public function setShippingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $shippingAddress = null);
 }

@@ -113,6 +113,22 @@ class Order extends \Magento\Sales\Model\Order implements OrderInterface
     /**
      * @inheritdoc
      */
+    public function getOrderState()
+    {
+        return $this->_getData(self::ORDER_STATE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setOrderState($orderState)
+    {
+        return $this->setData(self::ORDER_STATE, $orderState);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getPaymentMethod()
     {
         return $this->_getData(self::PAYMENT_METHOD);

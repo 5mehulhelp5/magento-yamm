@@ -35,4 +35,4 @@ This module enables store admins to trigger customer refunds directly from the M
 
 ```bash
 mkdir -p app/code/Mageserv/Yamm
-git clone https://github.com/your-org/magento-yamm-refund.git app/code/Mageserv/Yamm
+git clone git@github.com:yammrefund/magento-yamm.git app/code/Mageserv/Yamm

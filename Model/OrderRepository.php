@@ -174,6 +174,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
             ->setDate($order->getCreatedAt())
             ->setIsPendingPayment($order->getPayment()->getAmountPaid() != $order->getGrandTotal())
             ->setOrderStatus($order->getStatus())
+            ->setOrderState($order->getState())
             ->setOrderCurrency($order->getOrderCurrencyCode())
             ->setShowWeight($order->getWeight() > 0)
             ->setTotalWeight($order->getWeight())
