@@ -27,6 +27,7 @@ use Magento\Sales\Model\Order\Creditmemo\ItemCreationFactory;
 use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory as StatusCollectionFactory;
 use Mageserv\Yamm\Api\Data\OrderStatusInterfaceFactory;
 use Magento\Sales\Model\Order\CreditmemoFactory;
+
 class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
 {
     protected $orderFactory;
@@ -49,6 +50,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
     protected $creditmemoManagement;
     protected $_itemsToRefund = [];
     protected $_orderItems = [];
+
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         ResponseInterfaceFactory $responseInterfaceFactory,
@@ -68,8 +70,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
         CreditmemoFactory $creditmemoFactory,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         CreditmemoManagementInterface $creditmemoManagement
-    )
-    {
+    ) {
         $this->orderFactory = $orderFactory;
         $this->responseInterfaceFactory = $responseInterfaceFactory;
         $this->helper = $helper;
@@ -96,21 +97,23 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
     public function fetchOrder($request)
     {
         $order = $this->orderFactory->create()->loadByIncrementId($request->getIncrementId());
-        if(!$request->getMobileNumber() && !$request->getEmail())
+        if (!$request->getMobileNumber() && !$request->getEmail()) {
             throw new NoSuchEntityException(
                 __(
                     'Email address or mobile number required. Verify the information and try again!.',
                     $request->getIncrementId()
                 )
             );
-        if(!$order->getEntityId())
+        }
+        if (!$order->getEntityId()) {
             throw new NoSuchEntityException(
                 __(
                     'No order with the id "%1" increment id exists. Verify the information and try again!.',
                     $request->getIncrementId()
                 )
             );
-        if($request->getEmail() && $request->getEmail() != $order->getCustomerEmail())
+        }
+        if ($request->getEmail() && $request->getEmail() != $order->getCustomerEmail()) {
             throw new InputException(
                 __(
                     'Unable to found Order "%1" for email "%2". Verify the information and try again!.',
@@ -118,7 +121,8 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
                     $request->getMobileNumber()
                 )
             );
-        if($request->getMobileNumber() && ($request->getMobileNumber() != $order->getBillingAddress()->getTelephone() && $request->getMobileNumber() != $order->getShippingAddress()->getTelephone() ))
+        }
+        if ($request->getMobileNumber() && ($request->getMobileNumber() != $order->getBillingAddress()->getTelephone() && $request->getMobileNumber() != $order->getShippingAddress()->getTelephone())) {
             throw new InputException(
                 __(
                     'Unable to found Order "%1" for mobile number "%2". Verify the information and try again!.',
@@ -126,6 +130,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
                     $request->getMobileNumber()
                 )
             );
+        }
 
         return $this->mapOrdertoYammOrder($order);
     }
@@ -148,6 +153,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
             ->setTotalCount($list->getTotalCount());
         return $results;
     }
+
     /**
      * @inheritdoc
      */
@@ -156,6 +162,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
         $order = $this->orderFactory->create()->loadByIncrementId($id);
         return $this->mapOrdertoYammOrder($order);
     }
+
     /**
      * @param OrderInterface $order
      * @return \Mageserv\Yamm\Api\Data\OrderInterface
@@ -182,16 +189,16 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
             ->setShipping($order->getData('shipping_method'))
             ->setIsPaymentMethodAllowed($this->helper->isAllowedMethod($order->getPayment()->getMethod()))
             ->setFirstCompleteAt($order->getData('first_complete_at'));
-        if($order->getCustomerId()){
+        if ($order->getCustomerId()) {
             $customer = $this->customerRepository->getById($order->getCustomerId());
             $orderModel->setCustomer($customer);
         }
         $orderItems = [];
         $newItems = [];
-        foreach ($order->getAllVisibleItems() as $item){
+        foreach ($order->getAllVisibleItems() as $item) {
             $names = [];
             $pid = $item->getProductId();
-            if($item->getProductType() == "configurable"){
+            if ($item->getProductType() == "configurable") {
                 foreach ($item->getChildrenItems() as $childrenItem) {
                     $names[] = $childrenItem->getName();
                     $pid = $childrenItem->getProductId();
@@ -209,7 +216,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
                 ->setPrice($item->getRowTotal())
                 ->setQuantity($item->getQtyOrdered())
                 ->setSku($item->getSku());
-            if(($product = $this->productRepository->get($item->getSku()))){
+            if (($product = $this->productRepository->get($item->getSku()))) {
                 $image = ObjectManager::getInstance()->create(ProductMapper::class)->getProductImage($product);
                 $item->setImage($image);
                 $mediaGalleryEntries = $product->getMediaGalleryImages();
@@ -217,8 +224,9 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
                 foreach ($mediaGalleryEntries as $mediaGalleryEntry) {
                     $imageUrls[] = $mediaGalleryEntry->getUrl();
                 }
-                if(count($imageUrls))
+                if (count($imageUrls)) {
                     $orderItem->setImages($imageUrls);
+                }
             }
             $orderItems[] = $orderItem;
             $newItems[] = $item;
@@ -231,13 +239,14 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
     /**
      * @inheridoc
      */
-    public function processRefund($orderId, $refundItems){
+    public function processRefund($orderId, $refundItems)
+    {
 
         $order = $this->orderFactory->create()->loadByIncrementId($orderId);
         $this->validateForRefund($order, $refundItems);
         $qtys = [];
-        foreach ($order->getAllVisibleItems() as  $orderItem) {
-            $qtys['qtys'][$orderItem->getItemId()] = !empty($this->_orderItems[$orderItem->getSku()]) ? $this->_orderItems[$orderItem->getSku()]['qty'] : 0;
+        foreach ($order->getAllVisibleItems() as $orderItem) {
+            $qtys['qtys'][$orderItem->getItemId()] = !empty($this->_itemsToRefund[$orderItem->getSku()]) ? $this->_itemsToRefund[$orderItem->getSku()] : 0;
         }
         $creditmemo = $this->creditmemoFactory->createByOrder($order, $qtys);
         foreach ($creditmemo->getAllItems() as $creditmemoItem) {
@@ -258,7 +267,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
         $creditmemo->setCustomerNoteNotify(true);
         $this->creditmemoManagement->refund($creditmemo, true);
         /** @var \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment */
-       $state = $order->getTotalRefunded() == $order->getTotalInvoiced() ? \Mageserv\Yamm\Model\Refund::REFUNDED_BY_YAMM : \Mageserv\Yamm\Model\Refund::PARTIAL_REFUND_BY_YAMM;
+        $state = $order->getTotalRefunded() == $order->getTotalInvoiced() ? \Mageserv\Yamm\Model\Refund::REFUNDED_BY_YAMM : \Mageserv\Yamm\Model\Refund::PARTIAL_REFUND_BY_YAMM;
         $order->setState($state)
             ->setStatus($state);
         $this->orderRepository->save($order);
@@ -279,54 +288,81 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
         $this->orderRepository->save($order);
         return true;
     }
+
     /**
      * @inheridoc
      */
     public function rejectRefund($orderId, $refundItems)
     {
         $order = $this->orderFactory->create()->loadByIncrementId($orderId);
-        if($order->getState() !== Refund::UNDER_REFUND_BY_YAMM)
+        if ($order->getState() !== Refund::UNDER_REFUND_BY_YAMM) {
             throw new LocalizedException(__("Order cannot be rejected because it's not prepared by Yamm"));
+        }
         $order->setState(\Mageserv\Yamm\Model\Refund::REFUND_REJECTED_BY_YAMM)
             ->setStatus(\Mageserv\Yamm\Model\Refund::REFUND_REJECTED_BY_YAMM);
         $order->save();
         return true;
     }
+
     /**
      * @param OrderInterface $order
      * @return void
      * @throws InputException
      */
-    private function validateForRefund(OrderInterface $order, $refundItems){
-        if(!$order->getPayment())
-            throw new \Magento\Framework\Exception\LocalizedException(__("Order #%1 cannot be refunded because it doesn't have a valid payment.", $order->getIncrementId()));
-        if(!$this->helper->isAllowedMethod($order->getPayment()->getMethod()))
+    private function validateForRefund(OrderInterface $order, $refundItems)
+    {
+        if (!$order->getPayment()) {
+            throw new \Magento\Framework\Exception\LocalizedException(__("Order #%1 cannot be refunded because it doesn't have a valid payment.",
+                $order->getIncrementId()));
+        }
+        if (!$this->helper->isAllowedMethod($order->getPayment()->getMethod())) {
             throw new InputException(__("Order #%1 payment is not applicable by Yamm", $order->getIncrementId()));
-        if(!$order->canCreditmemo())
+        }
+        if (!$order->canCreditmemo()) {
             throw new InputException(__("Cannot create a refund for this item"));
+        }
         foreach ($refundItems as $refundItem) {
             $this->_itemsToRefund[$refundItem->getSku()] = $refundItem->getQty();
         }
         $errors = [];
-        foreach ($order->getAllItems() as $orderItem){
-            if(!in_array($orderItem->getSku(), array_keys($this->_itemsToRefund))) continue;
-            if(!$orderItem->canRefund())
-                $errors[] = __("Order Item: %1 with SKU: %2 cannot be refunded.", $orderItem->getItemId(), $orderItem->getSku());
-            $this->_orderItems[$orderItem->getSku()] = ['id' => $orderItem->getItemId(), 'qty' => $orderItem->getQtyInvoiced()];
+        foreach ($order->getAllItems() as $orderItem) {
+            if (!in_array($orderItem->getSku(), array_keys($this->_itemsToRefund))) {
+                continue;
+            }
+            if (!$orderItem->canRefund()) {
+                $parentItem = $orderItem->getParentItem();
+                if (!$parentItem || !$parentItem->canRefund()) {
+                    $errors[] = __("Order Item: %1 with SKU: %2 cannot be refunded.", $orderItem->getItemId(),
+                        $orderItem->getSku());
+                    continue;
+                }
+            }
+            $this->_orderItems[$orderItem->getSku()] = [
+                'id' => $orderItem->getParentItem() ? $orderItem->getParentItem()->getItemId() : $orderItem->getItemId(),
+                'qty' => $orderItem->getQtyInvoiced()
+            ];
         }
-        if(count($errors))
-            throw new InputException(__("Cannot refund order #%1. Reasons: %2", $order->getIncrementId(), implode("\n", $errors)));
+        if (count($errors)) {
+            throw new InputException(__("Cannot refund order #%1. Reasons: %2", $order->getIncrementId(),
+                implode("\n", $errors)));
+        }
 
         $notFounds = array_diff_key($this->_itemsToRefund, $this->_orderItems);
-        if(count($notFounds))
-            throw new InputException(__("Cannot refund order #%1. SKUs %2 not found", $order->getIncrementId(), implode("\n", $notFounds)));
-        $countErrors = [];
-        foreach ($this->_itemsToRefund as $sku => $qty){
-            if($qty > $this->_orderItems[$sku]['qty'])
-                $countErrors[] = __("SKU %1 refunded quantity cannot be greater than invoice quantity %2", $sku, $this->_orderItems[$sku]['qty']);
+        if (count($notFounds)) {
+            throw new InputException(__("Cannot refund order #%1. SKUs %2 not found", $order->getIncrementId(),
+                implode("\n", $notFounds)));
         }
-        if(count($countErrors))
-            throw new InputException(__("Cannot refund order #%1. Reasons: %2", $order->getIncrementId(), implode("\n", $countErrors)));
+        $countErrors = [];
+        foreach ($this->_itemsToRefund as $sku => $qty) {
+            if ($qty > $this->_orderItems[$sku]['qty']) {
+                $countErrors[] = __("SKU %1 refunded quantity cannot be greater than invoice quantity %2", $sku,
+                    $this->_orderItems[$sku]['qty']);
+            }
+        }
+        if (count($countErrors)) {
+            throw new InputException(__("Cannot refund order #%1. Reasons: %2", $order->getIncrementId(),
+                implode("\n", $countErrors)));
+        }
     }
 
     /**
@@ -348,6 +384,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
         $order->save();
         return $this->mapOrdertoYammOrder($order);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -376,7 +413,7 @@ class OrderRepository implements \Mageserv\Yamm\Api\OrderRepositoryInterface
     public function cancelRefund($orderId)
     {
         $order = $this->orderFactory->create()->loadByIncrementId($orderId);
-        if($order->getLastState() && $order->getLastStatus()){
+        if ($order->getLastState() && $order->getLastStatus()) {
             $order->setState($order->getLastState())
                 ->setStatus($order->getLastStatus())
                 ->setLastState(null)
