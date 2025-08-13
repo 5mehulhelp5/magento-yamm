@@ -21,4 +21,11 @@ interface CatalogManagementInterface
      * @return \Mageserv\Yamm\Api\Data\ProductInterface
      */
     public function get($sku);
+    /**
+     * Get product by id
+     *
+     * @param int $id
+     * @return \Mageserv\Yamm\Api\Data\ProductInterface
+     */
+    public function getById(int $id);
 }

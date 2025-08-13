@@ -55,4 +55,12 @@ class CatalogManagement implements CatalogManagementInterface
         $product = $this->productRepository->get($sku);
         return $this->productMapper->mapFromProduct($product);
     }
+    /**
+     * @inheritDoc
+     */
+    public function getById(int $id)
+    {
+        $product = $this->productRepository->getById($id);
+        return $this->productMapper->mapFromProduct($product);
+    }
 }
