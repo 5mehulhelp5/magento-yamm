@@ -32,7 +32,7 @@ class Yamm extends Data
     const API_TOKEN_XML_PATH = "yamm_refunds/api_configuration/api_token";
     const LOG_ENABLED_XML_PATH = "yamm_refunds/api_configuration/log_enabled";
     const STAGING_API_URL = "https://integration.yammrefund.com/magento/";
-    const PRODUCTION_API_URL = "https://webhook.site/f8469a85-6873-49f1-ad05-408fa263e860";
+    const PRODUCTION_API_URL = "https://integration.yamm.sa/magento/";
     protected $client;
     protected $json;
     protected $logger;
