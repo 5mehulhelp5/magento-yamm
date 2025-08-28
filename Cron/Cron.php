@@ -114,8 +114,8 @@ class Cron
         /** @var ResponseInterface $transaction */
         $transaction = $this->responseInterfaceFactory->create();
         $transaction->setEventType($task->getEventType());
-        if ($task->getEventType() != $this->deleteEvent) {
-            if (empty($this->cached[$this->_entityType]) && empty($this->cached[$this->_entityType][$task->getEntityId()])) {
+         if ($task->getEventType() != $this->deleteEvent) {
+            if (empty($this->cached[$this->_entityType]) || empty($this->cached[$this->_entityType][$task->getEntityId()])) {
                 try {
                     $entity = $this->getEntityById($task->getEntityId(), $this->_entityType);
                     if ($entity instanceof DataObject) {
@@ -123,7 +123,11 @@ class Cron
                     } else {
                         $modelData = $this->dataObjectProcessor->buildOutputDataArray($entity, get_class($entity));
                     }
-                    $data = $this->cached[$this->_entityType][$task->getEntityId()] = $modelData;
+                    if(empty($this->cached[$this->_entityType])){
+                        $this->cached[$this->_entityType] = [];
+                    }
+                    $this->cached[$this->_entityType][$task->getEntityId()] = $modelData;
+                    $data = $modelData;
                 } catch (\Exception $exception) {
                     // entity got deleted before queue process
                     $this->haltTask($task, $exception->getMessage());

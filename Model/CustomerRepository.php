@@ -48,10 +48,13 @@ class CustomerRepository implements CustomerRepositoryInterface
                 ->setStoreUpdatedAt($item->getUpdatedAt());
             /** @var ?AddressInterface $defaultAddress */
             if($item->getAddresses()){
-                $defaultAddress = array_filter($item->getAddresses(), function($address){
-                    return $address->isDefaultBilling();
-                });
-                $defaultAddress = count($defaultAddress) ? $defaultAddress[0] : null;
+                $defaultAddress = null;
+               foreach ($item->getAddresses() as $address) {
+                    if ($address->isDefaultBilling()) {
+                        $defaultAddress = $address;
+                        break;
+                    }
+                }
                 /** @var ?AddressInterface $defaultAddress */
                 if($defaultAddress){
                     $customer->setCity($defaultAddress->getCity())
